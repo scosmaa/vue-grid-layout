@@ -11,14 +11,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layoutJSON">
-                Displayed as <code>[x, y, w, h]</code>:
-                <div class="columns">
-                    <div class="layoutItem" v-for="item in layout2">
-                        <b>{{item.i}}</b>: [{{item.x}}, {{item.y}}, {{item.w}}, {{item.h}}]
-                    </div>
-                </div>
-            </div>
+            
         </div>
         <div id="content">
             <button @click="decreaseWidth">Decrease Width</button>
@@ -32,7 +25,7 @@
             <br/>
             Row Height: <input type="number" v-model="rowHeight"/> Col nums: <input type="number" v-model="colNum"/>
             <br/>
-            <grid-layout
+            <responsive-grid-layout
                     :layout="layout"
                     :col-num="parseInt(colNum)"
                     :row-height="rowHeight"
@@ -43,23 +36,24 @@
                     :use-css-transforms="true"
             >
                 <grid-item v-for="item in layout" :key="item.i"
+                           :aaa="item.positions"
                            :x="item.x"
                            :y="item.y"
                            :w="item.w"
                            :h="item.h"
-                           :min-w="2"
-                           :min-h="2"
+                           :min-w="1"
+                           :min-h="1"
                            :i="item.i"
                            @resize="resize"
                            @move="move"
                            @resized="resized"
                            @moved="moved"
-                >
+                >   
                     <!--<custom-drag-element :text="item.i"></custom-drag-element>-->
                     <test-element :text="item.i"></test-element>
                     <!--<button @click="clicked">CLICK ME!</button>-->
                 </grid-item>
-            </grid-layout>
+            </responsive-grid-layout>
             <hr/>
             <!--<grid-layout
                     :layout="layout2"
@@ -90,40 +84,32 @@
 
 <script>
     import GridItem from './GridItem.vue';
-    import GridLayout from './GridLayout.vue';
-    //import ResponsiveGridLayout from './ResponsiveGridLayout.vue';
+    //import GridLayout from './GridLayout.vue';
+    import ResponsiveGridLayout from './ResponsiveGridLayout.vue';
     import TestElement from './TestElement.vue';
     import CustomDragElement from './CustomDragElement.vue';
     //var eventBus = require('./eventBus');
 
     var testLayout = [
-        {"x":0,"y":0,"w":2,"h":2,"i":"0", resizable: true, draggable: true},
-        {"x":2,"y":0,"w":2,"h":4,"i":"1", resizable: null, draggable: null},
-        {"x":4,"y":0,"w":2,"h":5,"i":"2", resizable: false, draggable: false},
-        {"x":6,"y":0,"w":2,"h":3,"i":"3", resizable: false, draggable: false},
-        {"x":8,"y":0,"w":2,"h":3,"i":"4", resizable: false, draggable: false},
-        {"x":10,"y":0,"w":2,"h":3,"i":"5", resizable: false, draggable: false},
-        {"x":0,"y":5,"w":2,"h":5,"i":"6", resizable: false, draggable: false},
-        {"x":2,"y":5,"w":2,"h":5,"i":"7", resizable: false, draggable: false},
-        {"x":4,"y":5,"w":2,"h":5,"i":"8", resizable: false, draggable: false},
-        {"x":6,"y":4,"w":2,"h":4,"i":"9", resizable: false, draggable: false},
-        {"x":8,"y":4,"w":2,"h":4,"i":"10", resizable: false, draggable: false},
-        {"x":10,"y":4,"w":2,"h":4,"i":"11", resizable: false, draggable: false},
-        {"x":0,"y":10,"w":2,"h":5,"i":"12", resizable: false, draggable: false},
-        {"x":2,"y":10,"w":2,"h":5,"i":"13", resizable: false, draggable: false},
-        {"x":4,"y":8,"w":2,"h":4,"i":"14", resizable: false, draggable: false},
-        {"x":6,"y":8,"w":2,"h":4,"i":"15", resizable: false, draggable: false},
-        {"x":8,"y":10,"w":2,"h":5,"i":"16", resizable: false, draggable: false},
-        {"x":10,"y":4,"w":2,"h":2,"i":"17", resizable: false, draggable: false},
-        {"x":0,"y":9,"w":2,"h":3,"i":"18", resizable: false, draggable: false},
-        {"x":2,"y":6,"w":2,"h":2,"i":"19", resizable: false, draggable: false}
+        { 
+            "x":0,"y":0,"w":2,"h":2,
+            "positions" : {
+                "lg": {"x":0,"y":0,"w":2,"h":2},
+                "xs": {"x":0,"y":1,"w":2,"h":2}
+            },"i":"0", resizable: true, draggable: true},
+        { 
+            "x":2,"y":0,"w":2,"h":4,
+            "positions" : {
+                "lg": {"x":2,"y":0,"w":2,"h":4},
+                "xs": {"x":2,"y":2,"w":2,"h":4}
+            },"i":"1", resizable: null, draggable: null}
     ];
 
     export default {
         name: 'app',
         components: {
-            //ResponsiveGridLayout,
-            GridLayout,
+            ResponsiveGridLayout,
+            //GridLayout,
             GridItem,
             TestElement,
             CustomDragElement,
@@ -131,7 +117,6 @@
         data () {
             return {
                 layout: JSON.parse(JSON.stringify(testLayout)),
-                layout2: JSON.parse(JSON.stringify(testLayout)),
                 draggable: true,
                 resizable: true,
                 mirrored: false,

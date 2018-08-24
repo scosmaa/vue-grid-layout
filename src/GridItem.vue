@@ -153,19 +153,23 @@
             },
             x: {
                 type: Number,
-                required: true
+                //required: true
             },
             y: {
                 type: Number,
-                required: true
+                //required: true
             },
             w: {
                 type: Number,
-                required: true
+                //required: true
             },
             h: {
                 type: Number,
-                required: true
+                //required: true
+            },
+            aaa: {
+                type: Object,
+                default: null
             },
             i: {
                 required: true
@@ -216,10 +220,10 @@
                 previousH: null,
                 previousX: null,
                 previousY: null,
-                innerX: this.x,
-                innerY: this.y,
-                innerW: this.w,
-                innerH: this.h
+                innerX: this.aaa.lg.x,
+                innerY: this.aaa.lg.y,
+                innerW: this.aaa.lg.w,
+                innerH: this.aaa.lg.h
             }
         },
         created () {
@@ -227,6 +231,7 @@
 
             // Accessible refernces of functions for removing in beforeDestroy
             self.updateWidthHandler = function (width) {
+                console.log("updateWidthHandler", width);
                 self.updateWidth(width);
             };
 
@@ -305,6 +310,8 @@
             }
             this.useCssTransforms = this.$parent.useCssTransforms;
             this.createStyle();
+            console.log(this.aaa);
+            
         },
         watch: {
             isDraggable: function () {
@@ -438,6 +445,7 @@
                 let style;
                 // CSS Transforms support (default)
                 if (this.useCssTransforms) {
+                    debugger
 //                    Add rtl support
                     if (this.renderRtl) {
                         style = setTransformRtl(pos.top, pos.right, pos.width, pos.height);
@@ -446,6 +454,7 @@
                     }
 
                 } else { // top,left (slow)
+                    debugger
 //                    Add rtl support
                     if (this.renderRtl) {
                         style = setTopRight(pos.top, pos.right, pos.width, pos.height);
